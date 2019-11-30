@@ -61,6 +61,97 @@
       
         
 
+<article id="post-js中的reduce-方法" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 itemprop="name">
+      <a class="article-title" href="/2019/11/30/js%E4%B8%AD%E7%9A%84reduce-%E6%96%B9%E6%B3%95/">js中的reduce()方法</a>
+    </h2>
+  
+  
+
+
+
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/11/30/js%E4%B8%AD%E7%9A%84reduce-%E6%96%B9%E6%B3%95/" class="article-date">
+  <time datetime="2019-11-30T06:00:09.000Z" itemprop="datePublished">2019-11-30</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/javascript/">javascript</a>
+  </div>
+
+      </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+        <h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array.reduce(<span class="function"><span class="keyword">function</span>(<span class="params">total, currentValue, currentIndex, arr</span>),<span class="title">initialValue</span>)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>total : 必须，初始值或者计算后返回的值</li>
+<li>currentValue : 必须，当前元素</li>
+<li>currentIndex : 可选，当前元素的索引</li>
+<li>arr : 可选，当前元素的所属对象</li>
+<li>initialValue : 可选，传递给函数的初始值</li>
+</ul>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p>先声明一个原始数组arr</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="number">3</span>,<span class="number">9</span>,<span class="number">4</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">0</span>,<span class="number">9</span>];</span><br></pre></td></tr></table></figure>
+<h3 id="求数组各项之和"><a href="#求数组各项之和" class="headerlink" title="求数组各项之和"></a>求数组各项之和</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> sum = arr.reduce(<span class="function"><span class="keyword">function</span> (<span class="params">prev, cur</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> prev + cur;</span><br><span class="line">&#125;,<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<p>由于传入了初始值0，所以开始时prev的值为0，cur的值为数组第一项3，相加之后返回值为3作为下一轮回调的prev值，然后再继续与下一个数组项相加，以此类推，直至完成所有数组项的和并返回。</p>
+<h3 id="求数组项最大值"><a href="#求数组项最大值" class="headerlink" title="求数组项最大值"></a>求数组项最大值</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> max = arr.reduce(<span class="function"><span class="keyword">function</span> (<span class="params">prev, cur</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Math</span>.max(prev,cur);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>由于未传入初始值，所以开始时prev的值为数组第一项3，cur的值为数组第二项9，取两值最大值后继续进入下一轮回调。</p>
+<h3 id="数组去重"><a href="#数组去重" class="headerlink" title="数组去重"></a>数组去重</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> newArr = arr.reduce(<span class="function"><span class="keyword">function</span> (<span class="params">prev, cur</span>) </span>&#123;</span><br><span class="line">    prev.indexOf(cur) === <span class="number">-1</span> &amp;&amp; prev.push(cur);</span><br><span class="line">    <span class="keyword">return</span> prev;</span><br><span class="line">&#125;,[]);</span><br></pre></td></tr></table></figure>
+<ol>
+<li>初始化一个空数组</li>
+<li>将需要去重处理的数组中的第1项在初始化数组中查找，如果找不到（空数组中肯定找不到），就将该项添加到初始化数组中</li>
+<li>将需要去重处理的数组中的第2项在初始化数组中查找，如果找不到，就将该项继续添加到初始化数组中</li>
+<li>…</li>
+<li>将需要去重处理的数组中的第n项在初始化数组中查找，如果找不到，就将该项继续添加到初始化数组中</li>
+<li>将这个初始化数组返回</li>
+</ol>
+<h3 id="统计数组中每项出现的次数"><a href="#统计数组中每项出现的次数" class="headerlink" title="统计数组中每项出现的次数"></a>统计数组中每项出现的次数</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> arr.reduce(<span class="function"><span class="keyword">function</span>(<span class="params">prev,cur</span>)</span>&#123;</span><br><span class="line">    prev[cur] = (prev[cur] + <span class="number">1</span>) || <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">return</span> prev;</span><br><span class="line">&#125;,&#123;&#125;);</span><br><span class="line"><span class="comment">//&#123;0: 1, 3: 2, 4: 1, 6: 1, 9: 2&#125;</span></span><br></pre></td></tr></table></figure>
+<p>原理同<strong>数组去重</strong>。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p><code>reduce()</code> 是数组的归并方法，与<code>forEach()</code>、<code>map()</code>、<code>filter()</code>等迭代方法一样都会对数组每一项进行遍历，但是<code>reduce()</code>可同时将前面数组项遍历产生的结果与当前遍历项进行运算，这一点是其他迭代方法无法企及的。<br>相似的方法还有<code>reduceRight()</code>，该方法用法与reduce()其实是相同的，只是遍历的顺序相反，它是从数组的最后一项开始，向前遍历到第一项</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://chakinqin.github.io/2019/11/30/js%E4%B8%AD%E7%9A%84reduce-%E6%96%B9%E6%B3%95/" data-id="ck3l77zk40002ictkd70k872h"
+         class="article-share-link">Share</a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+
+
+
+      
+        
+
 <article id="post-js中的扩展运算符（spread）" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
   
   <div class="article-inner">
@@ -105,7 +196,7 @@
         <h3 id="在函数调用的时候取代apply"><a href="#在函数调用的时候取代apply" class="headerlink" title="在函数调用的时候取代apply"></a>在函数调用的时候取代apply</h3>  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr = [<span class="number">3</span>,<span class="number">6</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">x,y</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x + y ;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">add.apply(<span class="literal">null</span>,arr);</span><br><span class="line">add(...arr);</span><br><span class="line"><span class="comment">// ...arr 返回的是arr的各个值 </span></span><br><span class="line"></span><br><span class="line"><span class="comment">//Math.max()</span></span><br><span class="line"><span class="built_in">Math</span>.max.apply(<span class="literal">null</span>, [<span class="number">14</span>, <span class="number">3</span>, <span class="number">77</span>]) <span class="comment">// ES5 的写法</span></span><br><span class="line"><span class="built_in">Math</span>.max(...[<span class="number">14</span>, <span class="number">3</span>, <span class="number">77</span>]) <span class="comment">// ES6 的写法</span></span><br><span class="line"><span class="built_in">Math</span>.max(<span class="number">14</span>,<span class="number">4</span>,<span class="number">77</span>)</span><br></pre></td></tr></table></figure>
 <h3 id="数组和对象的拷贝"><a href="#数组和对象的拷贝" class="headerlink" title="数组和对象的拷贝"></a>数组和对象的拷贝</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr1 = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br><span class="line"><span class="keyword">var</span> arr2 = [...arr1];</span><br><span class="line">arr2.push(<span class="number">4</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(arr1 === arr2);  <span class="comment">// false</span></span><br><span class="line"><span class="built_in">console</span>.log(arr1); <span class="comment">// [1,2,3]</span></span><br><span class="line"><span class="built_in">console</span>.log(arr2);<span class="comment">// [1,2,3,4]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> obj1 = &#123;</span><br><span class="line">  a:<span class="number">1</span>,</span><br><span class="line">  b:<span class="number">2</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">var</span> obj2 = &#123;...obj1&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(obj2); <span class="comment">//&#123; a:1, b:2&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(obj1 === obj2);<span class="comment">// false</span></span><br></pre></td></tr></table></figure>
 <p>在这里你会发现，这是一个深拷贝，其实不然，实际上, 展开语法和 Object.assign() 行为一致, 执行的都是浅拷贝(只遍历一层)</p>
-<h3 id="构造字面量数组"><a href="#构造字面量数组" class="headerlink" title="构造字面量数组"></a>构造字面量数组</h3><p>没有展开语法的时候，只能组合使用 push, splice, concat 等方法，来将已有数组元素变成新数组的一部分。</p>
+<h3 id="构造字面量数组"><a href="#构造字面量数组" class="headerlink" title="构造字面量数组"></a>构造字面量数组</h3><p>没有展开语法的时候，只能组合使用 <code>push</code>, <code>splic</code>e, <code>concat</code> 等方法，来将已有数组元素变成新数组的一部分。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> arr1 = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br><span class="line"><span class="keyword">var</span> arr2 = [<span class="number">4</span>,<span class="number">5</span>,...arr1];</span><br><span class="line"><span class="built_in">console</span>.log(arr2);  <span class="comment">// [4,5,1,2,3]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> arr1 = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br><span class="line"><span class="keyword">var</span> arr2 = [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>];</span><br><span class="line"><span class="keyword">var</span> demo = [...arr1,...arr2];</span><br><span class="line"><span class="built_in">console</span>.log(demo);  <span class="comment">//  [1, 2, 3, 4, 5, 6]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> arr1 = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br><span class="line"><span class="keyword">var</span> arr2 = [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>];</span><br><span class="line">arr1 = [...arr2,...arr1];</span><br><span class="line"><span class="built_in">console</span>.log(arr1);  <span class="comment">//  [4, 5, 6, 1, 2, 3]</span></span><br></pre></td></tr></table></figure>
 <h3 id="字符串转数组"><a href="#字符串转数组" class="headerlink" title="字符串转数组"></a>字符串转数组</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> txt = <span class="string">'hello'</span>;</span><br><span class="line"><span class="built_in">console</span>.log([...txt])   <span class="comment">//["h","e","l","l","o"]</span></span><br></pre></td></tr></table></figure>
 <h3 id="用于传递不定参数"><a href="#用于传递不定参数" class="headerlink" title="用于传递不定参数"></a>用于传递不定参数</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">funtion demo(...args)&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">var</span> item <span class="keyword">of</span> args)&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(item)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">demo(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>)   <span class="comment">//1,2,3,4</span></span><br></pre></td></tr></table></figure>
@@ -113,12 +204,12 @@
 <h3 id="配合解构使用"><a href="#配合解构使用" class="headerlink" title="配合解构使用"></a>配合解构使用</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> [a,...rest] = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>];</span><br><span class="line"><span class="built_in">console</span>.log(a);</span><br><span class="line"><span class="built_in">console</span>.log(rest);</span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line"><span class="comment">// [2,3,4]</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> obj = &#123;</span><br><span class="line">  a:<span class="number">1</span>,</span><br><span class="line">  b:<span class="number">2</span>,</span><br><span class="line">  c:<span class="number">3</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> &#123;a,...demo&#125; = obj;</span><br><span class="line"><span class="built_in">console</span>.log(a);</span><br><span class="line"><span class="built_in">console</span>.log(demo);</span><br><span class="line"><span class="comment">// 1</span></span><br><span class="line"><span class="comment">// &#123;b:2,c:3&#125;</span></span><br></pre></td></tr></table></figure>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">...[a, b, c]</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(a);</span><br><span class="line">  <span class="keyword">return</span> a + b + c;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(f(<span class="number">1</span>))          <span class="comment">//1, NaN </span></span><br><span class="line"><span class="built_in">console</span>.log(f(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>))   <span class="comment">// 1, 6</span></span><br><span class="line"><span class="built_in">console</span>.log(f(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>)) <span class="comment">//1, 6</span></span><br></pre></td></tr></table></figure>
-<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>等号表达式是典型的赋值形式，函数传参和for循环的变量都是特殊形式的赋值。<br>解构的原理是赋值的两边具有相同的结构，就可以正确取出数组或对象里面的元素或属性值，省略了使用下标逐个赋值的麻烦。<br>对于三个点号，三点放在形参或者等号左边为rest运算符; 放在实参或者等号右边为spread运算符，或者说，放在被赋值一方为rest运算符，放在赋值一方为扩展运算符。</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>等号表达式是典型的赋值形式，函数传参和<code>for</code>循环的变量都是特殊形式的赋值。<br>解构的原理是赋值的两边具有相同的结构，就可以正确取出数组或对象里面的元素或属性值，省略了使用下标逐个赋值的麻烦。<br>对于三个点号，三点放在形参或者等号左边为<code>rest</code>运算符; 放在实参或者等号右边为<code>spread</code>运算符，或者说，放在被赋值一方为<code>rest</code>运算符，放在赋值一方为扩展运算符。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://chakinqin.github.io/2019/11/29/js%E4%B8%AD%E7%9A%84%E6%89%A9%E5%B1%95%E8%BF%90%E7%AE%97%E7%AC%A6%EF%BC%88spread%EF%BC%89/" data-id="ck3jyfzdt0002h4tk1xuzbwmv"
+      <a data-url="https://chakinqin.github.io/2019/11/29/js%E4%B8%AD%E7%9A%84%E6%89%A9%E5%B1%95%E8%BF%90%E7%AE%97%E7%AC%A6%EF%BC%88spread%EF%BC%89/" data-id="ck3l77zjn0000ictk9z5o83df"
          class="article-share-link">Share</a>
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li></ul>
@@ -192,7 +283,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://chakinqin.github.io/2019/11/12/hello-world/" data-id="ck3jyfzdk0000h4tk41tu4dg4"
+      <a data-url="https://chakinqin.github.io/2019/11/12/hello-world/" data-id="ck3l77zkf0005ictkfir542pk"
          class="article-share-link">Share</a>
       
     </footer>
