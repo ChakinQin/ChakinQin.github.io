@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  
+  
+    <meta name="description" content="秦佳庆的博客">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>
+    js中的Array.from()函数 |
+    
+    秦佳庆</title>
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+    <link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+  
+  <script src="/js/pace.min.js"></script>
+</head>
+
+<body>
+<main class="content">
+  <section class="outer">
+  
+
+<article id="post-js中的Array-from-函数" class="article article-type-post" itemscope itemprop="blogPost" data-scroll-reveal>
+  
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      js中的Array.from()函数
+    </h1>
+  
+  
+
+
+
+
+      </header>
+    
+
+    
+      <div class="article-meta">
+        <a href="/2019/11/30/js%E4%B8%AD%E7%9A%84Array-from-%E5%87%BD%E6%95%B0/" class="article-date">
+  <time datetime="2019-11-30T07:14:31.000Z" itemprop="datePublished">2019-11-30</time>
+</a>
+        
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/javascript/">javascript</a>
+  </div>
+
+      </div>
+    
+
+    
+      
+    <div class="tocbot"></div>
+
+
+
+
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+
+
+      
+
+      
+        <h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.from(arrayLike[, mapFn[, thisArg]])</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>arrayLike</code>：必传参数，想要转换成数组的伪数组对象或可迭代对象。</li>
+<li><code>mapFunction</code>：可选参数，<code>mapFunction(item，index){...}</code> 是在集合中的每个项目上调用的函数。返回的值将插入到新集合中。</li>
+<li><code>thisArg</code>：可选参数，执行回调函数 <code>mapFunction</code> 时 <code>this</code> 对象。这个参数很少使用。</li>
+</ul>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><h3 id="将类数组转换成数组"><a href="#将类数组转换成数组" class="headerlink" title="将类数组转换成数组"></a>将类数组转换成数组</h3><p><code>Array.from()</code>第一个用途：将类数组对象转换成数组。<br>通常，你会碰到的类数组对象有：函数中的<code>arguments</code>关键字，或者是一个<code>DOM</code>集合。<br>例如下面，对函数的参数进行求和</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">sumArguments</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Array</span>.from(<span class="built_in">arguments</span>).reduce(<span class="function">(<span class="params">sum, num</span>) =&gt;</span> sum + num);</span><br><span class="line">&#125;</span><br><span class="line">sumArguments(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>); <span class="comment">// =&gt; 6</span></span><br></pre></td></tr></table></figure>
+<p><code>Array.from(arguments)</code>将类数组对象<code>arguments</code>转换成一个数组，然后使用数组的 <code>reduce</code>方法求和。<br>此外，<code>Array.from()</code>的第一个参数可以是任意一个可迭代对象，我们继续看一些例子：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Array</span>.from(<span class="string">'Hey'</span>);                   <span class="comment">// =&gt; ['H', 'e', 'y']</span></span><br><span class="line"><span class="built_in">Array</span>.from(<span class="keyword">new</span> <span class="built_in">Set</span>([<span class="string">'one'</span>, <span class="string">'two'</span>])); <span class="comment">// =&gt; ['one', 'two']</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> map = <span class="keyword">new</span> <span class="built_in">Map</span>();</span><br><span class="line">map.set(<span class="string">'one'</span>, <span class="number">1</span>)</span><br><span class="line">map.set(<span class="string">'two'</span>, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">Array</span>.from(map); <span class="comment">// =&gt; [['one', 1], ['two', 2]]</span></span><br></pre></td></tr></table></figure>
+<h3 id="克隆一个数组"><a href="#克隆一个数组" class="headerlink" title="克隆一个数组"></a>克隆一个数组</h3><p>在 JavaScript 中有很多克隆数组的方法。正如你所想，Array.from() 可以很容易的实现数组的浅拷贝</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> numbers = [<span class="number">3</span>, <span class="number">6</span>, <span class="number">9</span>];</span><br><span class="line"><span class="keyword">const</span> numbersCopy = <span class="built_in">Array</span>.from(numbers);</span><br><span class="line">numbers === numbersCopy; <span class="comment">// =&gt; false</span></span><br></pre></td></tr></table></figure>
+<p><code>Array.from(numbers)</code>创建了对<code>numbers</code>数组的浅拷贝，<code>numbers === numbersCopy</code>的结果是<code>false</code>，意味着虽然<code>numbers</code>和<code>numbersCopy</code>有着相同的项，但是它们是不同的数组对象。<br>是否可以使用<code>Array.from()</code>创建数组的克隆，包括所有嵌套的？挑战一下！</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">recursiveClone</span>(<span class="params">val</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Array</span>.isArray(val) ? <span class="built_in">Array</span>.from(val, recursiveClone) : val;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> numbers = [[<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>], [<span class="string">'one'</span>, <span class="string">'two'</span>, <span class="string">'three'</span>]];</span><br><span class="line"><span class="keyword">const</span> numbersClone = recursiveClone(numbers);</span><br><span class="line"></span><br><span class="line">numbersClone; <span class="comment">// =&gt; [[0, 1, 2], ['one', 'two', 'three']]</span></span><br><span class="line">numbers[<span class="number">0</span>] === numbersClone[<span class="number">0</span>] <span class="comment">// =&gt; false</span></span><br></pre></td></tr></table></figure>
+<p><code>recursiveClone()</code>能够对数组的深拷贝，通过判断 数组的<code>item</code>是否是一个数组，如果是数组，就继续调用<code>recursiveClone()</code>来实现了对数组的深拷贝。</p>
+<h3 id="使用值填充数组"><a href="#使用值填充数组" class="headerlink" title="使用值填充数组"></a>使用值填充数组</h3><p>如果你需要使用相同的值来初始化数组，那么<code>Array.from()</code>将是不错的选择。<br>我们来定义一个函数，创建一个填充相同默认值的数组</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> length = <span class="number">3</span>;</span><br><span class="line"><span class="keyword">const</span> init   = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> result = <span class="built_in">Array</span>.from(&#123; length &#125;, () =&gt; init);</span><br><span class="line"></span><br><span class="line">result; <span class="comment">// =&gt; [0, 0, 0]</span></span><br></pre></td></tr></table></figure>
+<p><code>result</code>是一个新的数组，它的长度为<code>3</code>，数组的每一项都是<code>0</code>。调用 <code>Array.from()</code> 方法，传入一个类数组对象 <code>{ length }</code> 和 返回初始化值的 <code>mapFunction</code> 函数。<br>但是，有一个替代方法 <code>array.fill()</code> 可以实现同样的功能</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> length = <span class="number">3</span>;</span><br><span class="line"><span class="keyword">const</span> init   = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> result = <span class="built_in">Array</span>(length).fill(init);</span><br><span class="line"></span><br><span class="line">fillArray2(<span class="number">0</span>, <span class="number">3</span>); <span class="comment">// =&gt; [0, 0, 0]</span></span><br></pre></td></tr></table></figure>
+<p><code>fill()</code>使用初始值正确填充数组</p>
+<h4 id="使用对象填充数组"><a href="#使用对象填充数组" class="headerlink" title="使用对象填充数组"></a>使用对象填充数组</h4><p>当初始化数组的每个项都应该是一个新对象时，<code>Array.from()</code> 是一个更好的解决方案：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> length = <span class="number">3</span>;</span><br><span class="line"><span class="keyword">const</span> resultA = <span class="built_in">Array</span>.from(&#123; length &#125;, () =&gt; (&#123;&#125;));</span><br><span class="line"><span class="keyword">const</span> resultB = <span class="built_in">Array</span>(length).fill(&#123;&#125;);</span><br><span class="line"></span><br><span class="line">resultA; <span class="comment">// =&gt; [&#123;&#125;, &#123;&#125;, &#123;&#125;]</span></span><br><span class="line">resultB; <span class="comment">// =&gt; [&#123;&#125;, &#123;&#125;, &#123;&#125;]</span></span><br><span class="line"></span><br><span class="line">resultA[<span class="number">0</span>] === resultA[<span class="number">1</span>]; <span class="comment">// =&gt; false</span></span><br><span class="line">resultB[<span class="number">0</span>] === resultB[<span class="number">1</span>]; <span class="comment">// =&gt; true</span></span><br></pre></td></tr></table></figure>
+<p>由 <code>Array.from</code> 返回的 <code>resultA</code> 使用不同空对象实例进行初始化。之所以发生这种情况是因为每次调用时，<code>mapFunction</code>，即此处的 <code>() =&gt; ({})</code> 都会返回一个新的对象。<br>然后，<code>fill()</code> 方法创建的 <code>resultB</code> 使用相同的空对象实例进行初始化。不会跳过空项。</p>
+<h4 id="使用Array-map"><a href="#使用Array-map" class="headerlink" title="使用Array.map()?"></a>使用Array.map()?</h4><p>是不是可以使用 array.map() 方法来实现？我们来试一下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> length = <span class="number">3</span>;</span><br><span class="line"><span class="keyword">const</span> init   = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">const</span> result = <span class="built_in">Array</span>(length).map(<span class="function"><span class="params">()</span> =&gt;</span> init);</span><br><span class="line"></span><br><span class="line">result; <span class="comment">// =&gt; [undefined, undefined, undefined]</span></span><br></pre></td></tr></table></figure>
+<p><code>map()</code> 方法似乎不正常，创建出来的数组不是预期的 <code>[0, 0, 0]</code>，而是一个有3个空项的数组。<br>这是因为 <code>Array(length)</code> 创建了一个有3个空项的数组(也称为稀疏数组)，但是 <code>map()</code> 方法会跳过空项。</p>
+<h3 id="生成数字范围"><a href="#生成数字范围" class="headerlink" title="生成数字范围"></a>生成数字范围</h3><p>你可以使用 <code>Array.from()</code> 生成值范围。例如，下面的 <code>range</code> 函数生成一个数组，从0开始到 <code>end - 1</code>。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">range</span>(<span class="params">end</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">Array</span>.from(&#123; <span class="attr">length</span>: end &#125;, (_, index) =&gt; index);</span><br><span class="line">&#125;</span><br><span class="line">range(<span class="number">4</span>); <span class="comment">// =&gt; [0, 1, 2, 3]</span></span><br></pre></td></tr></table></figure>
+<p>在 <code>range()</code> 函数中，<code>Array.from()</code> 提供了类似数组的 <code>{length：end}</code> ，以及一个简单地返回当前索引的 <code>map</code> 函数 。这样你就可以生成值范围。</p>
+<h3 id="数组去重"><a href="#数组去重" class="headerlink" title="数组去重"></a>数组去重</h3><p>由于 <code>Array.from()</code>的入参是可迭代对象，因而我们可以利用其与 Set 结合来实现快速从数组中删除重复项。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">unique</span>(<span class="params">array</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">Array</span>.from(<span class="keyword">new</span> <span class="built_in">Set</span>(array));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">unique([<span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>]); <span class="comment">// =&gt; [1, 2, 3]</span></span><br></pre></td></tr></table></figure>
+<p>首先，<code>new Set(array)</code> 创建了一个包含数组的集合，<code>Set</code> 集合会删除重复项。因为 <code>Set</code> 集合是可迭代的，所以可以使用 <code>Array.from()</code> 将其转换为一个新的数组。这样，我们就实现了数组去重。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p><code>Array.from()</code> 方法接受类数组对象以及可迭代对象，它可以接受一个 <code>map</code> 函数，并且，这个 <code>map</code> 函数不会跳过值为 <code>undefined</code> 的数值项。这些特性给 <code>Array.from()</code> 提供了很多可能。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://chakinqin.github.io/2019/11/30/js%E4%B8%AD%E7%9A%84Array-from-%E5%87%BD%E6%95%B0/" data-id="ck3la6bdw0005c0tk07hfd578"
+         class="article-share-link">分享</a>
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/" rel="tag">javascript</a></li></ul>
+
+    </footer>
+
+  </div>
+
+  
+    
+  <nav class="article-nav">
+    
+    
+      <a href="/2019/11/30/js%E4%B8%AD%E7%9A%84reduce-%E6%96%B9%E6%B3%95/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">js中的reduce()方法</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+    
+  
+
+</article>
+
+
+
+</section>
+  <footer class="footer">
+  <div class="outer">
+    <div class="float-right">
+      <ul class="list-inline">
+  
+    <li><i class="fe fe-smile-alt"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+</ul>
+    </div>
+    <ul class="list-inline">
+      <li>&copy; 2019 秦佳庆</li>
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>Theme  <a href="https://github.com/zhwangart/hexo-theme-ocean" target="_blank" rel="noopener">Ocean</a></li>
+    </ul>
+  </div>
+</footer>
+
+</main>
+
+<aside class="sidebar sidebar-specter">
+  
+    <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+    <div class="logo">
+      <a href="/"><img src="/images/hexo.svg" alt="秦佳庆"></a>
+    </div>
+  
+  <ul class="nav nav-main">
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/">首页</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/archives">归档</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/gallery">相册</a>
+      </li>
+    
+      <li class="nav-item">
+        <a class="nav-item-link" href="/about">关于</a>
+      </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="搜索">
+        <i class="fe fe-search"></i>
+        搜索
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+        <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+          <i class="fe fe-feed"></i>
+        </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+  </aside>
+  <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/lazyload.min.js"></script>
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+  <script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+  <script src="/js/tocbot.min.js"></script>
+  <script>
+    // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+    tocbot.init({
+      tocSelector: '.tocbot',
+      contentSelector: '.article-entry',
+      headingSelector: 'h1, h2, h3, h4, h5, h6',
+      hasInnerContainers: true,
+      scrollSmooth: true,
+      positionFixedSelector: '.tocbot',
+      positionFixedClass: 'is-position-fixed',
+      fixedSidebarOffset: 'auto',
+    });
+  </script>
+
+
+<script src="/js/ocean.js"></script>
+
+</body>
+</html>
